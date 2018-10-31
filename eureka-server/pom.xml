@@ -3,12 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.netease.microservice</groupId>
-	<artifactId>microservice</artifactId>
+	<groupId>com.eureka</groupId>
+	<artifactId>eureka-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>microservice</name>
+	<name>eureka-server</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -27,24 +27,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-
-		<!--将注册为微服务-->
-		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-eureka</artifactId>
+			<artifactId>spring-cloud-starter-eureka-server</artifactId>
 		</dependency>
 
 		<dependency>
@@ -54,7 +38,6 @@
 		</dependency>
 	</dependencies>
 
-	<!--引入cloud的依赖-->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -75,5 +58,16 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 </project>

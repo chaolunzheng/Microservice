@@ -1,9 +1,13 @@
 package com.netease.microservice.controller;
 
 import com.netease.microservice.model.Book;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -16,9 +20,17 @@ import java.util.List;
  */
 @RestController
 public class TestHelloController {
+    private final Logger log = Logger.getLogger(getClass());
+
     //自动注入
     @Autowired
-    private  Book book;
+    private Book book;
+
+    /**
+     * 注册中心服务发现 客户端
+     */
+    @Autowired
+    private DiscoveryClient client;
 
     //读取配置文件
     @Value("${test.randStr.str}")
@@ -27,23 +39,36 @@ public class TestHelloController {
     @Value("${test.randNum.int}")
     private String ints;
 
-    @RequestMapping({"/li", "/"})
+    ServiceInstance instance;
+
+    @RequestMapping(value = {"/li", "/"}, method = RequestMethod.GET)
     public List<String> hello() {
+        instance = client.getLocalServiceInstance();
         List<String> li = new ArrayList<>();
         li.add("li1");
         li.add("li2");
         li.add("li3");
         li.add("li4");
+
+        log.info("{/li，/},host:" + instance.getHost() + ",service_id:" + instance.getServiceId());
         return li;
     }
 
     @RequestMapping({"/book"})
     public String book() {
-        return book.getName()+" | "+book.getAuthor();
+        instance = client.getLocalServiceInstance();
+
+        log.info("/book,host:" + instance.getHost() + ",service_id:" + instance.getServiceId());
+
+        return book.getName() + " | " + book.getAuthor();
     }
 
     @RequestMapping({"/rand"})
     public String rand() {
-        return "rand~str:"+val+"|rand~int:"+ints;
+        instance = client.getLocalServiceInstance();
+
+        log.info("/rand,host:" + instance.getHost() + ",service_id:" + instance.getServiceId());
+
+        return "rand~str:" + val + "|rand~int:" + ints;
     }
 }
